@@ -65,10 +65,6 @@ def index():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-print("jhabdfhbasiunaosdnoasndajksndkajsdnkaj")
-print("jhabdfhbasiunaosdnoasndajksndkajsdnkaj")
-
-
 def checkPermission(userid,name):
     checkP = db.session.query(permissions).filter(permissions.uid == userid).all()
     print(checkP)
@@ -198,9 +194,9 @@ def newPassword():
 
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
-    if (request.method == 'GET'):
+    if (request.method == 'POST'):
         loginApi = request.get_json()
         username = loginApi['username']
         email = loginApi['email']
