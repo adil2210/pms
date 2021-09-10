@@ -1,5 +1,6 @@
 from sqlalchemy import and_, or_, not_, update,func
 from sqlalchemy.sql.dml import Update
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -23,6 +24,7 @@ pymysql.install_as_MySQLdb()
 
 
 app = Flask(__name__)
+CORS(app)
 mail= Mail(app)
 app.secret_key = 'ghjc'
 
