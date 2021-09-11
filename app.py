@@ -31,6 +31,8 @@ app.secret_key = 'ghjc'
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
 app.config['TESTING'] = True
+app.config['SQLALCHEMY_POOL_SIZE'] = 1000
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 3000
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/propertymanagment'
@@ -59,7 +61,7 @@ mail = Mail(app)
 
 @app.route("/")
 def index():
-   msg = Message('Hello cake', sender =app.config['MAIL_USERNAME'], recipients = ['raheelsaleem470@gmail.com'])
+   msg = Message('Hello cake', sender =app.config['MAIL_USERNAME'], recipients = ['badarbaig21@gmail.com'])
    msg.body = "Hello Flask message sent from Flask-Mail"
    mail.send(msg)
    return "Sent"
@@ -239,7 +241,7 @@ def login():
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
             }
             token = (jwt.encode(data, app.config['SECRET_KEY']))
-            temp=[token,data]
+            temp=[token]
             obj=json.dumps(temp)
             return obj
         else:
