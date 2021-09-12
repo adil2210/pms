@@ -220,6 +220,7 @@ def login():
             passs=i.password
             name=i.username
             emaill=i.email
+            role=i.role
         getPermissions=permissions.query.filter(permissions.uid==idd).all()
         print(getPermissions)
         for n in getPermissions:
@@ -234,6 +235,7 @@ def login():
                 'id': idd,
                 'username': name,
                 'email': emaill,
+                'role': role,
                 'Accounts': acc,
                 'Purchase': pur,
                 'Sale': s,
