@@ -102,7 +102,7 @@ def getUserId():
     return decodedToken['id']
 
 
-@app.route("/sign", methods=['GET', 'POST'])
+@app.route("/signup", methods=['GET', 'POST'])
 def SignUp():
     if (request.method == 'POST'):
         # if checkPermission(getUserId(),"Accounts"):
