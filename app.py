@@ -17,8 +17,7 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
-from Construction import *
-
+from Construction import constructionApi
 
 
 pymysql.install_as_MySQLdb()
@@ -38,6 +37,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # app.config['SECRET_KEY'] = 'JustDemonstrating'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/propertymanagment'
 db = SQLAlchemy(app)
+
+
+# construction file imports
+app.register_blueprint(constructionApi)
+
+
 
 
 UPLOAD_FOLDER = 'images'
@@ -110,10 +115,10 @@ def SignUp():
         cnic = signupAPI['cnic']
         role = signupAPI['role']
         # permissions=signupAPI['permissions']
-        Accounts = signupAPI['permissions']['Accounts']
-        Purchase = signupAPI['permissions']['Purchase']
-        Sale = signupAPI['permissions']['Sale']
-        Supper = signupAPI['permissions']['Supper']
+        Accounts = signupAPI['permissions']['accounts']
+        Purchase = signupAPI['permissions']['purchase']
+        Sale = signupAPI['permissions']['sale']
+        Supper = signupAPI['permissions']['supper']
         checkEmail = signup.query.filter_by(email=email).first()
         checkphone = signup.query.filter_by(phoneno=phoneno).first()
         checkcnic = signup.query.filter_by(cnic=cnic).first()
@@ -128,11 +133,9 @@ def SignUp():
                         db.session.add(newUser)
                         db.session.commit()
                         getId = signup.query.all()
-                        print(getId)
                         n=0
                         for i in getId:
                             n=i.id
-                            print (n)
                         n = n+1
                         addPerm = permissions(uid=n, Accounts=Accounts, Purchase=Purchase,
                                             Sale=Sale, Supper=Supper)
@@ -544,9 +547,6 @@ def accountsData():
 #         accountUpdateApi=request.get_json()
 #         phoneno=accountUpdateApi['phoneno']
 #         getData=accountsdetail.query.filter(accountsdetail.phoneno==phoneno).all()
-
-
-
 
 
 # get all users from accounts table
@@ -1409,10 +1409,10 @@ def updateAccountDetailsAfterToken(table):
         return {"Balance is": remBalance}
 
 
-@app.route('/construction' ,methods=['POST'])
-def construct():
-    if (request.method == 'POST'):
-        return addConstructionAccountDetails()
+# @app.route('/construction' ,methods=['POST'])
+# def construct():
+#     if (request.method == 'POST'):
+#         return addConstructionAccountDetails()
 
 
 db.create_all()
