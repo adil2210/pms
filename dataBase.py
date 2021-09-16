@@ -179,9 +179,13 @@ class salepaymentmethod(db.Model):
     completeOrNot = db.Column(db.String(100), default=None, nullable=False)
 
 
+# Construction Module Tables
+class constructionaccount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    accountNo=db.Column(db.String(1000), default=None, nullable=False)
+    name = db.Column(db.String(1000), default=None, nullable=False)
+    amount = db.Column(db.Float, default=None, nullable=False)
 
-        
-    
 
 
 

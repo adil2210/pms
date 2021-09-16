@@ -17,6 +17,7 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
+from Construction import *
 
 
 
@@ -59,7 +60,7 @@ app.config['MAIL_SUPPRESS_SEND'] = False
 
 mail = Mail(app)
 
-@app.route("/")
+@app.route("/email")
 def index():
    msg = Message('Hello cake', sender =app.config['MAIL_USERNAME'], recipients = ['badarbaig21@gmail.com'])
    msg.body = "Hello Flask message sent from Flask-Mail"
@@ -100,18 +101,19 @@ def getUserId():
 def SignUp():
     if (request.method == 'POST'):
         # if checkPermission(getUserId(),"Accounts"):
-        sigupAPI = request.get_json()
-        username = sigupAPI['username']
-        email = sigupAPI['email']
-        password = sigupAPI['password']
+        signupAPI = request.get_json()
+        username = signupAPI['firstName'] + " " + signupAPI['lastName']
+        email = signupAPI['email']
+        password = signupAPI['password']
         hashed = pbkdf2_sha256.hash(password)
-        phoneno = sigupAPI['phoneno']
-        cnic = sigupAPI['cnic']
-        role = sigupAPI['role']
-        Accounts = sigupAPI['Accounts']
-        Purchase = sigupAPI['Purchase']
-        Sale = sigupAPI['Sale']
-        Supper = sigupAPI['Supper']
+        phoneno = signupAPI['phoneno']
+        cnic = signupAPI['cnic']
+        role = signupAPI['role']
+        # permissions=signupAPI['permissions']
+        Accounts = signupAPI['permissions']['Accounts']
+        Purchase = signupAPI['permissions']['Purchase']
+        Sale = signupAPI['permissions']['Sale']
+        Supper = signupAPI['permissions']['Supper']
         checkEmail = signup.query.filter_by(email=email).first()
         checkphone = signup.query.filter_by(phoneno=phoneno).first()
         checkcnic = signup.query.filter_by(cnic=cnic).first()
@@ -1407,7 +1409,10 @@ def updateAccountDetailsAfterToken(table):
         return {"Balance is": remBalance}
 
 
-
+@app.route('/construction' ,methods=['POST'])
+def construct():
+    if (request.method == 'POST'):
+        return addConstructionAccountDetails()
 
 
 db.create_all()
