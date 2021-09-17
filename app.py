@@ -309,7 +309,7 @@ def addsocietydataa():
                 #         return make_response("Wrong Plot Image Extension"), 400
                 return make_response("added"), 200
         else:
-            return make_response("Access Denied")
+            return make_response("Access Denied"),400
 
 
 # get society name for add plot to purchase
