@@ -5,7 +5,7 @@ from flask_sqlalchemy import *
 from sqlalchemy.sql import select
 from sqlalchemy.orm import relationship
 import jwt
-
+from flask import Blueprint
 
 class signup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -45,7 +45,7 @@ class addsocietydata(db.Model):
     plotsize = db.Column(db.String(100), nullable=False)
     plottype = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
-    sectormapimg = db.Column(db.String(100), nullable=True)
+    # sectormapimg = db.Column(db.String(100), nullable=True)
 
 
 class plotimages(db.Model):

@@ -17,7 +17,7 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
-from Construction import constructionApi
+# from construction.Construction import api
 
 
 pymysql.install_as_MySQLdb()
@@ -40,7 +40,7 @@ db = SQLAlchemy(app)
 
 
 # construction file imports
-app.register_blueprint(constructionApi)
+# app.register_blueprint(api)
 
 
 
@@ -267,24 +267,24 @@ def addsocietydataa():
             decodedToken = jwt.decode(
                 cleared_header, app.config['SECRET_KEY'], algorithms=["HS256"])
             print("decode token id is : ", decodedToken["id"])
-            files = request.files.getlist('img')
-            societyname = request.form['societyname']
-            sectorno = request.form['sectorno']
-            plotno = request.form['plotno']
-            plotsize = request.form['plotsize']
-            plottype = request.form['plottype']
-            description = request.form['description']
-            sectormapimg = request.files['sectormapimg']
+            addSocietApi = request.get_json()
+            societyname = addSocietApi['societyname']
+            sectorno = addSocietApi['sectorno']
+            plotno = addSocietApi['plotno']
+            plotsize = addSocietApi['plotsize']
+            plottype = addSocietApi['plottype']
+            description = addSocietApi['description']
+            # sectormapimg = request.files['sectormapimg']
             checkPlotSociety = addsocietydata.query.filter(and_(addsocietydata.plotno == plotno,
                                                                 addsocietydata.societyname == societyname)).first()
-            if sectormapimg and allowed_file(sectormapimg.filename):
-                sectorFilename = secure_filename(sectormapimg.filename)
-                sectormapimg.save(os.path.join(
-                    app.config['UPLOAD_FOLDER'], sectorFilename))
-                print(sectormapimg.read())
-                sectormapimgPath = ('images/' + sectorFilename)
-            else:
-                return make_response("Wrong Sector Image Extension"), 400
+            # if sectormapimg and allowed_file(sectormapimg.filename):
+            #     sectorFilename = secure_filename(sectormapimg.filename)
+            #     sectormapimg.save(os.path.join(
+            #         app.config['UPLOAD_FOLDER'], sectorFilename))
+            #     print(sectormapimg.read())
+            #     sectormapimgPath = ('images/' + sectorFilename)
+            # else:
+            #     return make_response("Wrong Sector Image Extension"), 400
 
             print(checkPlotSociety)
 
@@ -292,21 +292,21 @@ def addsocietydataa():
                 return make_response("Plot No already exists in this society"), 400
             else:
                 addSocitey = addsocietydata(uid=decodedToken["id"], societyname=societyname, sectorno=sectorno, plotno=plotno, plotsize=plotsize,
-                                            plottype=plottype, description=description, sectormapimg=sectormapimgPath)
+                                            plottype=plottype, description=description)
                 db.session.add(addSocitey)
                 db.session.commit()
-                for file in files:
-                    if file and allowed_file(file.filename):
-                        Plotfilename = secure_filename(file.filename)
-                        file.save(os.path.join(
-                            app.config['PLOT_FOLDER'], Plotfilename))
-                        plotimgPath = ('plotimg/' + Plotfilename)
-                        multipleimages = plotimages(
-                            plotnum=plotno, img=plotimgPath)
-                        db.session.add(multipleimages)
-                        db.session.commit()
-                    else:
-                        return make_response("Wrong Plot Image Extension"), 400
+                # for file in files:
+                #     if file and allowed_file(file.filename):
+                #         Plotfilename = secure_filename(file.filename)
+                #         file.save(os.path.join(
+                #             app.config['PLOT_FOLDER'], Plotfilename))
+                #         plotimgPath = ('plotimg/' + Plotfilename)
+                #         multipleimages = plotimages(
+                #             plotnum=plotno, img=plotimgPath)
+                #         db.session.add(multipleimages)
+                #         db.session.commit()
+                #     else:
+                #         return make_response("Wrong Plot Image Extension"), 400
                 return make_response("added"), 200
         else:
             return make_response("Access Denied")
