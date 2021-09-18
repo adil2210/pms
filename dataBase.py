@@ -2,10 +2,6 @@ from sqlalchemy.sql.expression import null
 from werkzeug.security import generate_password_hash
 from app import db
 from flask_sqlalchemy import *
-from sqlalchemy.sql import select
-from sqlalchemy.orm import relationship
-import jwt
-from flask import Blueprint
 
 class signup(db.Model):
     id = db.Column(db.Integer, primary_key=True)

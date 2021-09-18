@@ -1,4 +1,5 @@
 from sqlalchemy import and_, or_, not_, update,func
+# from sqlalchemy.ext.declarative import api
 from sqlalchemy.sql.dml import Update
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -17,13 +18,14 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
-# from construction.Construction import api
-
+# from construction import apii
 
 pymysql.install_as_MySQLdb()
 
 
 app = Flask(__name__)
+# app.add_url_rule('/construct',methods=['POST'], view_func=construction.addConstructionAccountDetails)
+# app.register_blueprint(apii)
 CORS(app)
 mail= Mail(app)
 app.secret_key = 'ghjc'
@@ -148,7 +150,7 @@ def SignUp():
                     return make_response("Phone-NO already exist"), 400
             else:
                 return make_response("Email already exist"), 400
-            
+
 
 @app.route('/reset', methods=['POST'])
 def resetPassword():
@@ -359,9 +361,9 @@ def getAllplots():
     return plotJson
 
 
-@app.route('/plottopurchase', methods=['GET'])
+@app.route('/plottopurchase', methods=['POST'])
 def addPlotToPurchase():
-    if (request.method == 'GET'):
+    if (request.method == 'POST'):
         if checkPermission(getUserId(),"Supper"):
             plotToPurchaseApi = request.get_json()
             societyname = plotToPurchaseApi['societyname']
