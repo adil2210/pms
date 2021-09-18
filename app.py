@@ -331,7 +331,7 @@ def getAllSocieties():
 
 # get sector no for add plot to purchase
 
-@app.route('/getsectors', methods=['GET'])
+@app.route('/getsectors', methods=['POST'])
 def getAllSectors():
     sectorlist = []
     allsectors = request.get_json()
@@ -347,7 +347,7 @@ def getAllSectors():
 
 # get plot no for add plot to purchase
 
-@app.route('/getplots', methods=['GET'])
+@app.route('/getplots', methods=['POST'])
 def getAllplots():
     plotlist = []
     allplots = request.get_json()
