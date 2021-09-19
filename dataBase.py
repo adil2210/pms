@@ -55,8 +55,7 @@ class plottopurchase(db.Model):
     societyname = db.Column(db.String(100), nullable=False)
     sectorno = db.Column(db.String(100), nullable=False)
     plotno = db.Column(db.String(100), nullable=False)
-    withdevelopment = db.Column(db.Boolean, default=False, nullable=False)
-    withoutdevelopment = db.Column(db.Boolean, default=False, nullable=False)
+    development = db.Column(db.Boolean, nullable=False)
     description = db.Column(db.String(1000), nullable=False)
     plotamount = db.Column(db.String(1000), nullable=False)
     plotownername = db.Column(db.String(100), nullable=False)
@@ -182,6 +181,24 @@ class constructionaccount(db.Model):
     name = db.Column(db.String(1000), default=None, nullable=False)
     amount = db.Column(db.Float, default=None, nullable=False)
 
+
+class constructionaddplot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    societyName=db.Column(db.String(1000), default=None, nullable=False)
+    plotNo=db.Column(db.String(1000), default=None, nullable=False)
+    plotOwnerName=db.Column(db.String(1000), default=None, nullable=False)
+    phoneNo=db.Column(db.String(1000), default=None, nullable=False)
+    streetLocation=db.Column(db.String(1000), default=None, nullable=False)
+    categories=db.Column(db.String(1000), default=None, nullable=False)
+    totalStories=db.Column(db.String(1000), default=None, nullable=False)
+    plotSqFeet=db.Column(db.Float, default=None, nullable=False)
+    totalPlotSize=db.Column(db.Float, default=None, nullable=False)
+    ratePerSqFeet=db.Column(db.Float, default=None, nullable=False)
+    amount=db.Column(db.Float, default=None, nullable=False)
+    structure=db.Column(db.String(1000), default=None, nullable=False)
+    material=db.Column(db.Boolean, nullable=False)
+    
+    
 
 
 

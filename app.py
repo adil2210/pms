@@ -18,7 +18,7 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
-# from construction import apii
+from construction import constructionAmount,constructionAddPlot
 
 pymysql.install_as_MySQLdb()
 
@@ -42,7 +42,9 @@ db = SQLAlchemy(app)
 
 
 # construction file imports
-# app.register_blueprint(api)
+app.register_blueprint(constructionAmount)
+app.register_blueprint(constructionAddPlot)
+
 
 
 
@@ -369,13 +371,12 @@ def addPlotToPurchase():
             societyname = plotToPurchaseApi['societyname']
             sectorno = plotToPurchaseApi['sectorno']
             plotno = plotToPurchaseApi['plotno']
-            withdevelopment = plotToPurchaseApi['withdevelopment']
-            withoutdevelopment = plotToPurchaseApi['withoutdevelopment']
+            development = plotToPurchaseApi['development']
             description = plotToPurchaseApi['description']
             plotamount = plotToPurchaseApi['plotamount']
             plotownername = plotToPurchaseApi['plotownername']
-            addtoPurchase = plottopurchase(societyname=societyname, sectorno=sectorno, plotno=plotno, withdevelopment=withdevelopment,
-                                           withoutdevelopment=withoutdevelopment, description=description, plotamount=plotamount, plotownername=plotownername)
+            addtoPurchase = plottopurchase(societyname=societyname, sectorno=sectorno, plotno=plotno, development=development,
+                                        description=description, plotamount=plotamount, plotownername=plotownername)
             db.session.add(addtoPurchase)
             db.session.commit()
             return make_response("ok"), 200
@@ -1410,11 +1411,6 @@ def updateAccountDetailsAfterToken(table):
             return make_response("no record found!"), 400
         return {"Balance is": remBalance}
 
-
-# @app.route('/construction' ,methods=['POST'])
-# def construct():
-#     if (request.method == 'POST'):
-#         return addConstructionAccountDetails()
 
 
 db.create_all()
