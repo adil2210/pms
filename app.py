@@ -115,7 +115,7 @@ def SignUp():
         email = signupAPI['email']
         password = signupAPI['password']
         hashed = pbkdf2_sha256.hash(password)
-        phoneno = signupAPI['phoneno']
+        phoneno = signupAPI['phone']
         cnic = signupAPI['cnic']
         role = signupAPI['role']
         # permissions=signupAPI['permissions']
