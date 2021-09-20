@@ -71,20 +71,20 @@ class accountsdetail(db.Model):
     accName = db.Column(db.String(1000), nullable=False)
     bankName = db.Column(db.String(1000), nullable=False)
     accNo = db.Column(db.String(1000), nullable=False)
-    amountToInvest = db.Column(db.String(1000), nullable=False)
+    amountToInvest = db.Column(db.Float, nullable=False)
     dateTime = db.Column(db.String(1000), nullable=False)
-    amountInCash = db.Column(db.String(1000), default=None, nullable=False)
-    chequeAmount = db.Column(db.String(100), default=None, nullable=False)
+    amountInCash = db.Column(db.Float, default=None, nullable=False)
+    chequeAmount = db.Column(db.Float, default=None, nullable=False)
     noOfCheques = db.Column(db.String(100), default=None, nullable=False)
     chequeNo = db.Column(db.String(100), default=None, nullable=False)
     chequeDescription = db.Column(
         db.String(1000), default=None, nullable=False)
-    payorderAmount = db.Column(db.String(100), default=None, nullable=False)
+    payorderAmount = db.Column(db.Float, default=None, nullable=False)
     noOfPayOrder = db.Column(db.String(100), default=None, nullable=False)
     payOrderNo = db.Column(db.String(100), default=None, nullable=False)
     payOrderDescription = db.Column(
         db.String(1000), default=None, nullable=False)
-    onlineTransfer = db.Column(db.String(100), default=None, nullable=False)
+    onlineTransfer = db.Column(db.Float, default=None, nullable=False)
     onlineDescription = db.Column(db.String(100), default=None, nullable=False)
 
 

@@ -475,7 +475,7 @@ def getAllplotsInfoFromPPT():
 def getAllpartners():
     if (request.method == 'GET'):
         partnerlist = []
-        allUsers = signup.query.filter_by(signup.role == 'partner')
+        allUsers = signup.query.filter(signup.role == 'partner')
         for user in allUsers:
             dict = {"id": user.id,
                     "username": user.username,
@@ -494,7 +494,7 @@ def getAllpartners():
 def getAlladmins():
     if (request.method == 'GET'):
         adminslist = []
-        allUsers = signup.query.filter_by(signup.role == 'admin')
+        allUsers = signup.query.filter(signup.role == 'admin')
         for user in allUsers:
             dict = {"id": user.id,
                     "username": user.username,
@@ -507,6 +507,56 @@ def getAlladmins():
         return adminListJson
     else:
         return make_response("Error"), 400
+
+
+
+def checkTotalOfPayments(aIc, cA, pOa, ot):
+    aIc=float(aIc)
+    cA=float(cA)
+    pOa=float(pOa)
+    ot=float(ot)
+    if aIc and cA and pOa and ot:
+        add = aIc+cA+pOa+ot
+        return add
+    elif aIc and cA and pOa:
+        add = aIc+cA+pOa
+        return add
+    elif aIc and cA and ot:
+        add = aIc+cA+ot
+        return add
+    elif aIc and pOa and ot:
+        add = aIc+pOa+ot
+        return add
+    elif cA and pOa and ot:
+        add = cA+pOa+ot
+        return add
+    elif aIc and cA:
+        add = aIc+cA
+        return add
+    elif aIc and pOa:
+        add = aIc+pOa
+        return add
+    elif aIc and ot:
+        add = aIc+ot
+        return add
+    elif cA and pOa:
+        add = cA+pOa
+        return add
+    elif cA and ot:
+        add = cA+ot
+        return add
+    elif pOa and ot:
+        add = pOa+ot
+        return add
+    elif aIc:
+        return aIc
+    elif cA:
+        return cA
+    elif pOa:
+        return pOa
+    elif ot:
+        return ot
+
 
 
 @app.route('/accountdetails', methods=['POST'])
@@ -534,12 +584,22 @@ def accountsData():
             payOrderDescription = accountsApi['payOrderDescription']
             onlineTransfer = accountsApi['onlineTransfer']
             onlineDescription = accountsApi['onlineDescription']
-            accounts = accountsdetail(uid=uid, name=name, contactNo=contactNo, cnic=cnic, role=role, accName=accName, bankName=bankName, accNo=accNo, amountToInvest=amountToInvest,
-                                      dateTime=datetime.datetime.now(), amountInCash=amountInCash, chequeAmount=chequeAmount, noOfCheques=noOfCheques, chequeNo=chequeNo, chequeDescription=chequeDescription,
-                                      payorderAmount=payorderAmount, noOfPayOrder=noOfPayOrder, payOrderNo=payOrderNo, payOrderDescription=payOrderDescription, onlineTransfer=onlineTransfer, onlineDescription=onlineDescription)
-            db.session.add(accounts)
-            db.session.commit()
-            return make_response("added"), 200
+            accDetails=accountsdetail.query.filter(accountsdetail.uid==uid).all()
+            if amountInCash or chequeAmount or payorderAmount or onlineTransfer:
+                tOp = checkTotalOfPayments(amountInCash, chequeAmount, payorderAmount, onlineTransfer)
+                print(tOp)
+                if(tOp != float(amountToInvest)):
+                    return make_response("added amount of is greater or smaller than total investment"),400
+                else:
+                    if(accDetails):
+                        return make_response("user already exists"),400
+                    else:
+                        accounts = accountsdetail(uid=uid, name=name, contactNo=contactNo, cnic=cnic, role=role, accName=accName, bankName=bankName, accNo=accNo, amountToInvest=amountToInvest,
+                                        dateTime=datetime.datetime.now(), amountInCash=amountInCash, chequeAmount=chequeAmount, noOfCheques=noOfCheques, chequeNo=chequeNo, chequeDescription=chequeDescription,
+                                        payorderAmount=payorderAmount, noOfPayOrder=noOfPayOrder, payOrderNo=payOrderNo, payOrderDescription=payOrderDescription, onlineTransfer=onlineTransfer, onlineDescription=onlineDescription)
+                        db.session.add(accounts)
+                        db.session.commit()
+                        return make_response("added"), 200
         else:
             return make_response("Access Denied")
 
@@ -615,48 +675,6 @@ def checkPartnerInvestmentWithAmount(partner):
         return pName
 
 
-def checkTotalOfPayments(aIc, cA, pOa, ot):
-    if aIc and cA and pOa and ot:
-        add = aIc+cA+pOa+ot
-        return add
-    elif aIc and cA and pOa:
-        add = aIc+cA+pOa
-        return add
-    elif aIc and cA and ot:
-        add = aIc+cA+ot
-        return add
-    elif aIc and pOa and ot:
-        add = aIc+pOa+ot
-        return add
-    elif cA and pOa and ot:
-        add = cA+pOa+ot
-        return add
-    elif aIc and cA:
-        add = aIc+cA
-        return add
-    elif aIc and pOa:
-        add = aIc+pOa
-        return add
-    elif aIc and ot:
-        add = aIc+ot
-        return add
-    elif cA and pOa:
-        add = cA+pOa
-        return add
-    elif cA and ot:
-        add = cA+ot
-        return add
-    elif pOa and ot:
-        add = pOa+ot
-        return add
-    elif aIc:
-        return aIc
-    elif cA:
-        return cA
-    elif pOa:
-        return pOa
-    elif ot:
-        return ot
 
 
 # all the payments are handling in this route
