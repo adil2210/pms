@@ -192,14 +192,20 @@ class constructionaddplot(db.Model):
     categories=db.Column(db.String(1000), default=None, nullable=False)
     totalStories=db.Column(db.String(1000), default=None, nullable=False)
     plotSqFeet=db.Column(db.Float, default=None, nullable=False)
-    totalPlotSize=db.Column(db.Float, default=None, nullable=False)
+    totalPlotSize=db.Column(db.String(1000), default=None, nullable=False)
     ratePerSqFeet=db.Column(db.Float, default=None, nullable=False)
     amount=db.Column(db.Float, default=None, nullable=False)
     structure=db.Column(db.String(1000), default=None, nullable=False)
     material=db.Column(db.Boolean, nullable=False)
     
+class constructionaddsupplier(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(1000),default=None,nullable=False)
+    contact=db.Column(db.String(1000),default=None,nullable=False)
+    cnic=db.Column(db.String(1000),default=None,nullable=False)
+    address=db.Column(db.String(1000),default=None,nullable=False)
+    filer=db.Column(db.Boolean,nullable=False)
     
-
 
 
 db.create_all()

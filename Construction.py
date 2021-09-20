@@ -3,10 +3,11 @@ from flask import make_response
 from flask import *
 import app
 
-#simple_page = Blueprint('simple_page', __name__, template_folder='templates')
 constructionAmount = Blueprint('constructionAmountApi', __name__)
 constructionAddPlot= Blueprint('constructionAddPlotApi', __name__)
+constructionAddSupplier=Blueprint('constructionAddSupplierApi',__name__)
 
+# add account for construction start up
 @constructionAmount.route('/constructionAmount' ,methods=['POST'])
 def addConstructionAccountDetails():
     constructionDetailsApi = request.get_json()
@@ -18,6 +19,7 @@ def addConstructionAccountDetails():
     app.db.session.commit()
     return make_response("added"),200
     
+# add plot for construction
 @constructionAddPlot.route('/addPlot' ,methods=['POST'])
 def addPlot():
     addPlotApi = request.get_json()
@@ -31,13 +33,26 @@ def addPlot():
     plotSqFeet = addPlotApi['plotSqFeet']
     totalPlotSize = addPlotApi['totalPlotSize']
     ratePerSqFeet = addPlotApi['ratePerSqFeet']
-    amount = addPlotApi['amount']
     structure = addPlotApi['structure']
     material = addPlotApi['material']
-    
-    addPlot=dataBase.constructionaddplot(societyName=societyName,plotNo=plotNo,plotOwnerName=plotOwnerName,phoneNo=phoneNo,amount=amount,
+    totalAmount=plotSqFeet*ratePerSqFeet
+    addPlot=dataBase.constructionaddplot(societyName=societyName,plotNo=plotNo,plotOwnerName=plotOwnerName,phoneNo=phoneNo,amount=totalAmount,
                                               streetLocation=streetLocation,categories=categories,totalStories=totalStories,plotSqFeet=plotSqFeet,totalPlotSize=totalPlotSize,ratePerSqFeet=ratePerSqFeet,structure=structure,material=material)
-    app.db.add(addPlot)
+    app.db.session.add(addPlot)
     app.db.session.commit()
     return make_response("added"),200
 
+# add supplier account
+@constructionAddSupplier.route('/addSupplier',methods=['Post'])
+def addSupplier():
+    addSupplierApi=request.get_json()
+    name=addSupplierApi['name']
+    contact=addSupplierApi['contact']
+    cnic=addSupplierApi['cnic']
+    address=addSupplierApi['address']
+    filer=addSupplierApi['filer']
+    supplierAdd=dataBase.constructionaddsupplier(name=name,contact=contact,cnic=cnic,address=address,filer=filer)
+    app.db.session.add(supplierAdd)
+    app.db.session.execute()
+    return make_response("added"),200
+    

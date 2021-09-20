@@ -18,7 +18,7 @@ import jwt
 import datetime
 from flask_mail import Mail,Message
 import random
-from construction import constructionAmount,constructionAddPlot
+from construction import constructionAmount,constructionAddPlot,constructionAddSupplier
 
 pymysql.install_as_MySQLdb()
 
@@ -43,6 +43,7 @@ db = SQLAlchemy(app)
 
 # construction file imports
 app.register_blueprint(constructionAmount)
+app.register_blueprint(constructionAddPlot)
 app.register_blueprint(constructionAddPlot)
 
 
@@ -398,8 +399,7 @@ def getAllDataFromPlotToPurchase():
                         "societyname": data.societyname,
                         "sectorno": data.sectorno,
                         "plotno": data.plotno,
-                        "withdevelopment": data.withdevelopment,
-                        "withoutdevelopment": data.withoutdevelopment,
+                        "development": data.development,
                         "description": data.description,
                         "plotamount": data.plotamount,
                         "plotownername": data.plotownername}
