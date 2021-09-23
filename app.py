@@ -44,7 +44,7 @@ db = SQLAlchemy(app)
 # construction file imports
 app.register_blueprint(constructionAmount)
 app.register_blueprint(constructionAddPlot)
-app.register_blueprint(constructionAddPlot)
+app.register_blueprint(constructionAddSupplier)
 
 
 
