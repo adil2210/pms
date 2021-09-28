@@ -214,6 +214,8 @@ class constructionpurchaseproduct(db.Model):
     itemName=db.Column(db.String(1000),default=None,nullable=False)
     rate=db.Column(db.Float,default=None,nullable=False)
     unit=db.Column(db.String(1000),default=None,nullable=False)
+    quantity=db.Column(db.String(1000),default=None,nullable=False)
+    supplierName=db.Column(db.String(1000),default=None,nullable=False)
     
 
 
