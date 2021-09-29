@@ -1,1 +1,1 @@
-web: gunicorn PMS-BACKEND:app
+web: gunicorn app:app
