@@ -376,6 +376,7 @@ def addPlotToPurchase():
             description = plotToPurchaseApi['description']
             plotamount = plotToPurchaseApi['plotamount']
             plotownername = plotToPurchaseApi['plotownername']
+            dev=bool(development)
             addtoPurchase = plottopurchase(societyname=societyname, sectorno=sectorno, plotno=plotno, development=development,
                                         description=description, plotamount=plotamount, plotownername=plotownername)
             db.session.add(addtoPurchase)
