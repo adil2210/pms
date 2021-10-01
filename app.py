@@ -1,5 +1,4 @@
 from sqlalchemy import and_, or_, not_, update,func
-# from sqlalchemy.ext.declarative import api
 from sqlalchemy.sql.dml import Update
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -19,6 +18,10 @@ import datetime
 from flask_mail import Mail,Message
 import random
 from construction import constructionAmount,constructionAddPlot,constructionAddSupplier
+import sqlite3 as sql
+from flask_marshmallow import Marshmallow
+import os
+
 
 pymysql.install_as_MySQLdb()
 
@@ -28,6 +31,10 @@ app = Flask(__name__)
 # app.register_blueprint(apii)
 CORS(app)
 mail= Mail(app)
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'crud.sqlite')
+# db = SQLAlchemy(app)
+# ma = Marshmallow(app)
 app.secret_key = 'ghjc'
 
 app.config['ENV'] = 'development'
@@ -571,11 +578,18 @@ def accountsData():
     if (request.method == 'POST'):
         if checkPermission(getUserId() , "Accounts"):
             accountsApi = request.get_json()
-            name = accountsApi['name']
-            contactNo = accountsApi['contactNo']
+            #name = accountsApi['name']
+            #contactNo = accountsApi['contactNo']
             uid = accountsApi['uid']
-            cnic = accountsApi['cnic']
-            role = accountsApi['role']
+            user = signup.query.filter_by(id = uid).all()
+            for use in user:
+                print('adil')
+                cnic = use.cnic
+                role = use.role
+                name = use.username
+                contactNo = use.phoneno
+            #cnic = accountsApi['cnic']
+            #role = accountsApi['role']
             accName = accountsApi['accName']
             bankName = accountsApi['bankName']
             accNo = accountsApi['accNo']
@@ -592,31 +606,43 @@ def accountsData():
             onlineTransfer = accountsApi['onlineTransfer']
             onlineDescription = accountsApi['onlineDescription']
             accDetails=accountsdetail.query.filter(accountsdetail.uid==uid).all()
-            if amountInCash or chequeAmount or payorderAmount or onlineTransfer:
-                tOp = checkTotalOfPayments(amountInCash, chequeAmount, payorderAmount, onlineTransfer)
-                print(tOp)
-                if(tOp != float(amountToInvest)):
-                    return make_response("added amount of is greater or smaller than total investment"),400
-                else:
-                    if(accDetails):
-                        return make_response("user already exists"),400
+            if accDetails:
+                if amountInCash or chequeAmount or payorderAmount or onlineTransfer:
+                    tOp = checkTotalOfPayments(amountInCash, chequeAmount, payorderAmount, onlineTransfer)
+                    print(tOp)
+                    if(tOp != float(amountToInvest)):
+                        return make_response("added amount of is greater or smaller than total investment"),400
                     else:
-                        accounts = accountsdetail(uid=uid, name=name, contactNo=contactNo, cnic=cnic, role=role, accName=accName, bankName=bankName, accNo=accNo, amountToInvest=amountToInvest,
-                                        dateTime=datetime.datetime.now(), amountInCash=amountInCash, chequeAmount=chequeAmount, noOfCheques=noOfCheques, chequeNo=chequeNo, chequeDescription=chequeDescription,
-                                        payorderAmount=payorderAmount, noOfPayOrder=noOfPayOrder, payOrderNo=payOrderNo, payOrderDescription=payOrderDescription, onlineTransfer=onlineTransfer, onlineDescription=onlineDescription)
-                        db.session.add(accounts)
-                        db.session.commit()
-                        return make_response("added"), 200
+                        if(accDetails):
+                            return make_response("user already exists"),400
+                        else:
+                            accounts = accountsdetail(uid=uid, name=name, contactNo=contactNo, cnic=cnic, role=role, accName=accName, bankName=bankName, accNo=accNo, amountToInvest=amountToInvest,
+                                            dateTime=datetime.datetime.now(), amountInCash=amountInCash, chequeAmount=chequeAmount, noOfCheques=noOfCheques, chequeNo=chequeNo, chequeDescription=chequeDescription,
+                                            payorderAmount=payorderAmount, noOfPayOrder=noOfPayOrder, payOrderNo=payOrderNo, payOrderDescription=payOrderDescription, onlineTransfer=onlineTransfer, onlineDescription=onlineDescription)
+                            db.session.add(accounts)
+                            db.session.commit()
+                            return make_response("added"), 200
+            else:
+                return make_response('user already exist!'),400
         else:
             return make_response("Access Denied")
 
 
-# @app.route('/updateaccount', methods=['POST'])
-# def updateAccountsData():
-#     if (request.method == 'POST'):
-#         accountUpdateApi=request.get_json()
-#         phoneno=accountUpdateApi['phoneno']
-#         getData=accountsdetail.query.filter(accountsdetail.phoneno==phoneno).all()
+@app.route('/updateaccount', methods=['POST'])
+def updateAccountsData():
+    if (request.method == 'POST'):
+        accountUpdateApi=request.get_json()
+        uid=accountUpdateApi['uid']
+        amount = accountUpdateApi['amount']
+        try:
+            stmt = (update(accountsdetail). where(
+            accountsdetail.uid == uid). values(amountToInvest=amount))
+            db.session.execute(stmt)
+            db.session.commit()
+        except Exception as e:
+            return make_response('cannot update') , 400
+    else:
+        return make_response('method error!')
 
 
 # get all users from accounts table
