@@ -40,11 +40,11 @@ app.secret_key = 'ghjc'
 app.config['ENV'] = 'development'
 app.config['DEBUG'] = True
 app.config['TESTING'] = True
-app.config['SQLALCHEMY_POOL_SIZE'] = 1000
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 3000
+# app.config['SQLALCHEMY_POOL_SIZE'] = 1000
+# app.config['SQLALCHEMY_POOL_TIMEOUT'] = 3000
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # app.config['SECRET_KEY'] = 'JustDemonstrating'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/propertymanagment'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
 
